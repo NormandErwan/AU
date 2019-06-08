@@ -7,9 +7,10 @@ environment:
   auth_token:
     secure: 6ofAZV1tmD6f2ubY3R3QNjkxAg+zyniEYixAia6FjzKNhcQeY+mYOFAx2vWi8hdp
 install:
-  - echo $git_repo
-  - echo $oauth_token
-  - echo $($oauth_token)
+  - echo ${git_repo}
+  - echo $env:git_repo
+  - echo $(git_repo)
+  - echo $(env:git_repo)
   - choco install docfx -y
 build_script:
   - cp README.md Documentation/index.md

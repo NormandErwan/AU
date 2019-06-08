@@ -1,7 +1,7 @@
 # Inspired by: https://github.com/docascode/docfx-seed/blob/master/appveyor.yml
 environment:
   # TODO configure your own project by changing values of environment variables
-  git_repo: NormandErwan/DocFxForUnity
+  git_repo: NormandErwan/AU
   git_user_email: normand.erwan@protonmail.com
   git_user_name: Erwan Normand
   auth_token:
@@ -14,7 +14,7 @@ build_script:
 after_build:
   # Clone repo's gh-pages branch (see: https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages)
   - |
-    git clone https://$($env:oauth_token)@github.com/$env:git_repo -b gh-pages gh-pages
+    git clone https://$($env:oauth_token)@github.com/$($env:git_repo) -b gh-pages gh-pages
     cd gh-pages
   # Remove old docs, but keep the Unity's xref maps (specific to DocFxForUnity, you can remove it for you own project)
   - |

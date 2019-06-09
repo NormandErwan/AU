@@ -8,31 +8,26 @@ environment:
   auth_token:
     secure: 6ofAZV1tmD6f2ubY3R3QNjkxAg+zyniEYixAia6FjzKNhcQeY+mYOFAx2vWi8hdp
 install:
-  - sh: echo ${git_repo}
-  - sh: echo ${auth_token}
-  - sh: echo $(${auth_token})
-  - ps: echo $env:git_repo
-  - ps: echo $($env:auth_token)
-  - sh: choco install docfx -y
+  - choco install docfx -y
 build_script:
-  - sh: cp README.md Documentation/index.md
-  - sh: docfx Documentation/docfx.json
+  - cp README.md Documentation/index.md
+  - docfx Documentation/docfx.json
 after_build:
   # Clone repo's gh-pages branch (see: https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages)
-  - sh: |
-        git clone https://$($env:oauth_token)@github.com/$git_repo -b gh-pages gh-pages
+  - ps: |
+        git clone https://$($env:oauth_token)@github.com/$env:git_repo -b gh-pages gh-pages --quiet
         cd gh-pages
-  # Remove old docs, but keep the Unity's xref maps (specific to DocFxForUnity, you can remove it for you own project)
-  - sh: |
-        shopt -s extglob
-        rm -rf !(Unity)
+  # Remove old docs (necessary to have clean new docs)
+  # But keep the Unity's xref maps (specific to DocFxForUnity, you can remove it for you own project)
+  - ps: |
+        Get-ChildItem -exclude Unity | rm -r
   # Add, commit and push new docs
-  - sh: |
-        cp -r ../_site/* .
-        git add --all 2>&1
+  - ps: |
+        cp -r ..\_site\* .
+        git add --all | out-null
 
         git config --global user.email $git_user_email
         git config --global user.name $git_user_name
-        git commit -m "Documentation update"
+        git commit -m "Documentation update" --quiet
 
-        git push origin gh-pages
+        git push origin gh-pages --quiet

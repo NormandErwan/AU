@@ -1,4 +1,5 @@
 # Inspired by: https://github.com/docascode/docfx-seed/blob/master/appveyor.yml
+image: Visual Studio 2017
 environment:
   # TODO configure your own project by changing values of environment variables
   git_repo: NormandErwan/AU
@@ -8,9 +9,8 @@ environment:
     secure: 6ofAZV1tmD6f2ubY3R3QNjkxAg+zyniEYixAia6FjzKNhcQeY+mYOFAx2vWi8hdp
 install:
   - sh: echo ${git_repo}
-  - sh: echo $env:git_repo
-  - sh: echo $(git_repo)
-  - sh: echo $(env:git_repo)
+  - sh: echo ${auth_token}
+  - sh: echo $(${auth_token})
   - sh: choco install docfx -y
 build_script:
   - sh: cp README.md Documentation/index.md

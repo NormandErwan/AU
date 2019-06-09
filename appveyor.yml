@@ -15,7 +15,7 @@ build_script:
 after_build:
   # Clone repo's gh-pages branch (see: https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages)
   - ps: |
-        git clone https://$($env:oauth_token)@github.com/$env:git_repo -b gh-pages gh-pages --quiet
+        git clone https://github.com/$env:git_repo -b gh-pages gh-pages --quiet
         cd gh-pages
   # Remove old docs (necessary to have clean new docs)
   # But keep the Unity's xref maps folder (specific to DocFxForUnity, you can keep only the `rm -r` on you own project)
@@ -30,4 +30,6 @@ after_build:
         git config --global user.name $env:git_user_name
         git commit -m "Documentation update" --quiet
 
+        git config --global credential.helper store
+        Add-Content "$HOME\.git-credentials" "https://$($env:oauth_token):x-oauth-basic@github.com`n"
         git push origin gh-pages --quiet

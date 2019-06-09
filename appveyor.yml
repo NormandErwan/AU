@@ -7,25 +7,25 @@ environment:
   auth_token:
     secure: 6ofAZV1tmD6f2ubY3R3QNjkxAg+zyniEYixAia6FjzKNhcQeY+mYOFAx2vWi8hdp
 install:
-  - echo ${git_repo}
-  - echo $env:git_repo
-  - echo $(git_repo)
-  - echo $(env:git_repo)
-  - choco install docfx -y
+  - sh: echo ${git_repo}
+  - sh: echo $env:git_repo
+  - sh: echo $(git_repo)
+  - sh: echo $(env:git_repo)
+  - sh: choco install docfx -y
 build_script:
-  - cp README.md Documentation/index.md
-  - docfx Documentation/docfx.json
+  - sh: cp README.md Documentation/index.md
+  - sh: docfx Documentation/docfx.json
 after_build:
   # Clone repo's gh-pages branch (see: https://help.github.com/en/articles/configuring-a-publishing-source-for-github-pages)
-  - |
-    git clone https://$($env:oauth_token)@github.com/$git_repo -b gh-pages gh-pages
-    cd gh-pages
+  - sh: |
+        git clone https://$($env:oauth_token)@github.com/$git_repo -b gh-pages gh-pages
+        cd gh-pages
   # Remove old docs, but keep the Unity's xref maps (specific to DocFxForUnity, you can remove it for you own project)
-  - |
+  - sh: |
     shopt -s extglob
     rm -rf !(Unity)
   # Add, commit and push new docs
-  - |
+  - sh: |
     cp -r ../_site/* .
     git add --all 2>&1
 
